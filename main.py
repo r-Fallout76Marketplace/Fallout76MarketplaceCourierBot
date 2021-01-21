@@ -72,8 +72,10 @@ while True:
                         cooldown_memory.append(user_obj)
                         bot_responses.request_sent_successfully(comment)
                         message = "[u/" + comment.author.name + "](https://www.reddit.com/"
-                        message += comment.submission.permalink + ") is requesting courier service. Please react to " \
-                                                                  "the message after you have completed the request. "
+                        message += comment.submission.permalink + ") is requesting courier service. Please react to "
+                        message += "the message after you have completed the request. "
+                        message += ":green_circle: = request completed, :red_circle: = request rejected, and "
+                        message += ":yellow_circle: = request expired. "
                         send_message_to_discord(message)
                 # send comment if the submission is of wrong type
                 else:
