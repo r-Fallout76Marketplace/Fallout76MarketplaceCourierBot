@@ -71,7 +71,7 @@ while True:
                     else:
                         cooldown_memory.append(user_obj)
                         bot_responses.request_sent_successfully(comment)
-                        message = "[u/" + comment.author.name + "](https://www.reddit.com/"
+                        message = "[u/" + comment.author.name + "](https://www.reddit.com"
                         message += comment.submission.permalink + ") is requesting courier service. Please react to "
                         message += "the message after you have completed the request. "
                         message += ":green_circle: = request completed, :red_circle: = request rejected, and "
