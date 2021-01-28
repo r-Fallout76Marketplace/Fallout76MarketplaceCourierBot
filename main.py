@@ -73,10 +73,11 @@ while True:
                         bot_responses.request_sent_successfully(comment)
                         message = "[u/" + comment.author.name + "](https://www.reddit.com"
                         message += comment.submission.permalink + ") is requesting courier service. Please react to "
-                        message += "the message after you have completed the request. "
-                        message += "<:request_completed:803477382156648448> = request completed, "
-                        message += "<:request_expired:803477444581523466> = request expired, and "
-                        message += "<:request_rejected:803477462360784927> = request rejected. "
+                        message += "the message accordingly. "
+                        message += "<:request_completed:803477382156648448> (request completed), "
+                        message += "<:request_inprocess:804224025688801290> (request in process), "
+                        message += "<:request_expired:803477444581523466> (request expired), and "
+                        message += "<:request_rejected:803477462360784927> (request rejected). "
                         send_message_to_discord(message)
                 # send comment if the submission is of wrong type
                 else:
