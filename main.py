@@ -50,6 +50,13 @@ def search_in_cool_down_memory(user_obj):
 
 
 # Make sure bot run forever
+def send_error_message_to_discord(tb):
+    data = {"content": tb, "username": CONFIG.username}
+    output = requests.post(CONFIG.error_message_webhook, data=json.dumps(data), headers={"Content-Type": "application"
+                                                                                                         "/json"})
+    output.raise_for_status()
+
+
 while True:
     try:
         schedule.run_pending()
@@ -86,14 +93,13 @@ while True:
         # Sends a message to mods in case of error
         tb = traceback.format_exc()
         try:
-            CONFIG.reddit.redditor("is_fake_Account").message(CONFIG.subreddit_name, tb,
-                                                              from_subreddit=CONFIG.subreddit_name)
+            send_error_message_to_discord(tb)
             print(tb)
         except Exception:
             print("Error sending message to is_fake_Account")
 
         # Try again after a pause
-        time.sleep(30 * failed_attempt)
+        time.sleep(120 * failed_attempt)
         failed_attempt = failed_attempt + 1
 
         # Refresh streams
