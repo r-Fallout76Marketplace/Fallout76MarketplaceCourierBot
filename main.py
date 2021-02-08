@@ -32,7 +32,7 @@ def refresh_memory():
 
 # Send message to discord channel
 def send_message_to_discord(message_param):
-    data = {"content": message_param, "username": CONFIG.username}
+    data = {"content": message_param, "username": CONFIG.bot_name}
     output = requests.post(CONFIG.discord_webhook, data=json.dumps(data), headers={"Content-Type": "application/json"})
     output.raise_for_status()
 
@@ -51,7 +51,7 @@ def search_in_cool_down_memory(user_obj):
 
 # Make sure bot run forever
 def send_error_message_to_discord(tb):
-    data = {"content": tb, "username": CONFIG.username}
+    data = {"content": tb, "username": CONFIG.bot_name}
     output = requests.post(CONFIG.error_message_webhook, data=json.dumps(data), headers={"Content-Type": "application"
                                                                                                          "/json"})
     output.raise_for_status()
