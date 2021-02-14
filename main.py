@@ -3,6 +3,7 @@ import re
 import time
 import traceback
 
+import prawcore
 import requests
 import schedule
 
@@ -64,7 +65,7 @@ while True:
         for comment in comment_stream:
             if comment is None or comment.author.name == "AutoModerator":
                 break
-            courier_trigger_keyword = r"!COURIER"
+            courier_trigger_keyword = r"^(!COURIER|COURIER!)"
             if re.search(courier_trigger_keyword, comment.body, re.IGNORECASE) is not None:
                 # Check if the submission flair is right
                 regex = re.compile('XBOX|Price Check XBOX|PlayStation|Price Check PS|PC|Price Check PC', re.IGNORECASE)
@@ -89,7 +90,7 @@ while True:
                 # send comment if the submission is of wrong type
                 else:
                     bot_responses.not_valid_submission(comment)
-    except Exception:
+    except Exception as exception:
         # Sends a message to mods in case of error
         tb = traceback.format_exc()
         try:
@@ -98,9 +99,12 @@ while True:
         except Exception:
             print("Error sending message to is_fake_Account")
 
-        # Try again after a pause
-        time.sleep(120 * failed_attempt)
-        failed_attempt = failed_attempt + 1
+        # In case of server error pause for two minutes
+        if isinstance(exception, prawcore.exceptions.ServerError):
+            print("Waiting {} minutes".format(2*failed_attempt))
+            # Try again after a pause
+            time.sleep(120 * failed_attempt)
+            failed_attempt = failed_attempt + 1
 
         # Refresh streams
         comment_stream = subreddit.stream.comments(pause_after=-1, skip_existing=True)
