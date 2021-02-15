@@ -38,7 +38,7 @@ def send_message_to_discord(message_param):
     output.raise_for_status()
 
 
-schedule.every(1830).seconds.do(refresh_memory)
+schedule.every(16).minutes.do(refresh_memory)
 print('Bot has started running...')
 
 
