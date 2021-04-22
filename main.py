@@ -1,18 +1,26 @@
 import json
+import os
 import re
 import time
 import traceback
 
+import praw
 import prawcore
 import requests
 import schedule
 
-import CONFIG
 import bot_responses
 import users
 
+# Login Api
+reddit = praw.Reddit(client_id=os.environ['client_id'],
+                     client_secret=os.environ['client_secret'],
+                     username=os.environ['username'],
+                     password=os.environ['password'],
+                     user_agent=os.environ['user_agent'])
+
 # Only works in the subreddit mentioned in CONFIG and when bot is mentioned explicitly
-subreddit = CONFIG.reddit.subreddit(CONFIG.subreddit_name)
+subreddit = reddit.subreddit(os.environ['subreddit_name'])
 
 # Gets 100 historical comments
 comment_stream = subreddit.stream.comments(pause_after=-1, skip_existing=True)
@@ -33,8 +41,9 @@ def refresh_memory():
 
 # Send message to discord channel
 def send_message_to_discord(message_param):
-    data = {"content": message_param, "username": CONFIG.bot_name}
-    output = requests.post(CONFIG.discord_webhook, data=json.dumps(data), headers={"Content-Type": "application/json"})
+    data = {"content": message_param, "username": os.environ['bot_name']}
+    output = requests.post(os.environ['discord_webhook'], data=json.dumps(data),
+                           headers={"Content-Type": "application/json"})
     output.raise_for_status()
 
 
@@ -57,9 +66,9 @@ def search_in_cool_down_memory(author_name):
 
 # Make sure bot run forever
 def send_error_message_to_discord(tb):
-    data = {"content": tb, "username": CONFIG.bot_name}
-    output = requests.post(CONFIG.error_message_webhook, data=json.dumps(data), headers={"Content-Type": "application"
-                                                                                                         "/json"})
+    data = {"content": tb, "username": os.environ['bot_name']}
+    output = requests.post(os.environ['error_message_webhook'], data=json.dumps(data),
+                           headers={"Content-Type": "application/json"})
     output.raise_for_status()
 
 
