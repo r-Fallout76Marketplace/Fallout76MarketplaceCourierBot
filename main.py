@@ -20,15 +20,15 @@ comment_stream = subreddit.stream.comments(pause_after=-1, skip_existing=True)
 # The numbers of failed attempt to connect to reddit
 failed_attempt = 1
 
-# cooldown_memory so people don't send repeated requests
-cooldown_memory = []
+# cool down_memory so people don't send repeated requests
+cool_down_memory = {}
 
 
 # Delete the users whose cool down have expired
 def refresh_memory():
-    for user_obj_mem in cooldown_memory:
-        if user_obj_mem.is_cool_down_expired():
-            cooldown_memory.remove(user_obj_mem)
+    for key, value in cool_down_memory.items():
+        if value.is_cool_down_expired():
+            del cool_down_memory[key]
 
 
 # Send message to discord channel
@@ -38,16 +38,21 @@ def send_message_to_discord(message_param):
     output.raise_for_status()
 
 
-schedule.every(16).minutes.do(refresh_memory)
+schedule.every(30).minutes.do(refresh_memory)
 print('Bot has started running...')
 
 
 # Checks if the user_obj is in cool_down memory
-def search_in_cool_down_memory(user_obj):
-    for user_obj_mem in cooldown_memory:
-        if user_obj.__cmp__(user_obj_mem):
+# If it in memory checks if the timer is up or not
+def search_in_cool_down_memory(author_name):
+    if author_name in cool_down_memory.keys():
+        user_obj = cool_down_memory[author_name]
+        if user_obj.is_cool_down_expired():
+            return False
+        else:
             return True
-    return False
+    else:
+        return False
 
 
 # Make sure bot run forever
@@ -72,12 +77,12 @@ while True:
                 submission_flair_text = comment.submission.link_flair_text
                 match = re.match(regex, str(submission_flair_text))
                 if match is not None:
-                    user_obj = users.Users(comment)
                     # Check if the user is still in cool down
-                    if search_in_cool_down_memory(user_obj):
+                    if search_in_cool_down_memory(comment.author.name):
                         bot_responses.still_in_cool_down(comment)
                     else:
-                        cooldown_memory.append(user_obj)
+                        user_obj = users.Users(comment)
+                        cool_down_memory[comment.author.name] = user_obj
                         bot_responses.request_sent_successfully(comment)
                         message = "[u/" + comment.author.name + "](https://www.reddit.com"
                         message += comment.submission.permalink + ") is requesting courier service. Please react to "
@@ -101,7 +106,7 @@ while True:
 
         # In case of server error pause for two minutes
         if isinstance(exception, prawcore.exceptions.ServerError):
-            print("Waiting {} minutes".format(2*failed_attempt))
+            print("Waiting {} minutes".format(2 * failed_attempt))
             # Try again after a pause
             time.sleep(120 * failed_attempt)
             failed_attempt = failed_attempt + 1

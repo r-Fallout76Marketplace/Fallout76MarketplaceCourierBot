@@ -18,12 +18,12 @@ class Users:
         self.submission_author = self.submission.author
 
         # time_requested
-        self.time_utc = comment.created_utc
+        self.time_of_request = comment.created_utc
 
     # Compares the authors name and submissions
     def is_cool_down_expired(self):
         now = time.time()
-        age = now - self.time_utc
+        age = now - self.time_of_request
 
         # cool down expires after 30 minutes
         if age > 1800:
