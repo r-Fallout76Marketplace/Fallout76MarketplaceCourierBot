@@ -34,7 +34,7 @@ cool_down_memory = {}
 
 # Delete the users whose cool down have expired
 def refresh_memory():
-    for key, value in cool_down_memory.items():
+    for key, value in list(cool_down_memory.items()):
         if value.is_cool_down_expired():
             del cool_down_memory[key]
 
