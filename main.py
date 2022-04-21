@@ -93,13 +93,22 @@ while True:
                         user_obj = users.Users(comment)
                         cool_down_memory[comment.author.name] = user_obj
                         bot_responses.request_sent_successfully(comment)
-                        message = "[u/" + comment.author.name + "](https://www.reddit.com"
-                        message += comment.submission.permalink + ") is requesting courier service. Please react to "
-                        message += "the message accordingly. "
-                        message += "<:request_completed:803477382156648448> (request completed), "
-                        message += "<:request_inprocess:804224025688801290> (request in process), "
-                        message += "<:request_expired:803477444581523466> (request expired), and "
-                        message += "<:request_rejected:803477462360784927> (request rejected). "
+
+                        if "xbox" in submission_flair_text.lower():
+                            console_type = "Xbox"
+                        elif "playstation" in submission_flair_text.lower() or "PS" in submission_flair_text.lower():
+                            console_type = "Playstaion"
+                        elif "pc" in submission_flair_text.lower():
+                            console_type = "PC"
+                        else:
+                            console_type = "Mod"
+
+                        message = f"@{console_type}[u/{comment.author.name}](https://www.reddit.com{comment.submission.permalink}) " \
+                                  f"is requesting courier service. Please react to the message accordingly. " \
+                                  f"<:request_completed:803477382156648448> (request completed), " \
+                                  f"<:request_inprocess:804224025688801290> (request in process), " \
+                                  f"<:request_expired:803477444581523466> (request expired), and " \
+                                  f"<:request_rejected:803477462360784927> (request rejected). "
                         send_message_to_discord(message)
                 # send comment if the submission is of wrong type
                 else:
