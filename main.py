@@ -95,15 +95,15 @@ while True:
                         bot_responses.request_sent_successfully(comment)
 
                         if "xbox" in submission_flair_text.lower():
-                            console_type = "Xbox"
+                            console_type = "<@&794246049278591007>"
                         elif "playstation" in submission_flair_text.lower() or "PS" in submission_flair_text.lower():
-                            console_type = "Playstaion"
+                            console_type = "<@&794245851743518730>"
                         elif "pc" in submission_flair_text.lower():
-                            console_type = "PC"
+                            console_type = "<@&794246168288034856>"
                         else:
                             console_type = "Mod"
 
-                        message = f"@{console_type}[u/{comment.author.name}](https://www.reddit.com{comment.submission.permalink}) " \
+                        message = f"@{console_type} [u/{comment.author.name}](https://www.reddit.com{comment.submission.permalink}) " \
                                   f"is requesting courier service. Please react to the message accordingly. " \
                                   f"<:request_completed:803477382156648448> (request completed), " \
                                   f"<:request_inprocess:804224025688801290> (request in process), " \
