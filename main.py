@@ -103,7 +103,7 @@ while True:
                         else:
                             console_type = "Mod"
 
-                        message = f"@{console_type} [u/{comment.author.name}](https://www.reddit.com{comment.submission.permalink}) " \
+                        message = f"{console_type} [u/{comment.author.name}](https://www.reddit.com{comment.submission.permalink}) " \
                                   f"is requesting courier service. Please react to the message accordingly. " \
                                   f"<:request_completed:803477382156648448> (request completed), " \
                                   f"<:request_inprocess:804224025688801290> (request in process), " \
