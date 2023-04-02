@@ -1,39 +1,33 @@
 import time
+from dataclasses import dataclass
+
+from praw.models import Comment, Redditor, Submission
 
 
-# Users class
-# Stores important information and calculates if cool down time has expired
+@dataclass
 class Users:
+    comment: Comment
+    author: Redditor = None
+    submission: Submission = None
+    submission_author: Redditor = None
+    time_of_request: float = None
 
-    # Constructor
-    def __init__(self, comment):
-        # comment
-        self.comment = comment
-        # Author of comment
+    def __post_init__(self):
         self.author = self.comment.author
-
-        # Submission
         self.submission = self.comment.submission
-        # Submission Author
         self.submission_author = self.submission.author
+        self.time_of_request = self.comment.created_utc
 
-        # time_requested
-        self.time_of_request = comment.created_utc
-
-    # Compares the authors name and submissions
     def is_cool_down_expired(self):
         now = time.time()
         age = now - self.time_of_request
 
-        # cool down expires after 30 minutes
         if age > 1800:
             return True
         else:
             return False
 
-    # compares two user objects
-    def __cmp__(self, other):
-        if self.author == other.author:
-            if self.submission == other.submission:
-                return True
+    def __eq__(self, other):
+        if self.author == other.author and self.submission == other.submission:
+            return True
         return False
