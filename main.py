@@ -47,9 +47,8 @@ def search_in_cool_down_memory(submission_id: str):
 
 def send_error_message_to_discord(exception_body: str):
     data = {"content": exception_body, "username": os.getenv('bot_name')}
-    output = requests.post(os.getenv('error_message_webhook'), data=json.dumps(data),
-                           headers={"Content-Type": "application/json"})
-    output.raise_for_status()
+    output = requests.post(os.getenv('error_message_webhook'), data=json.dumps(data), headers={"Content-Type": "application/json"})
+    print(f"Sent error msg to discord: {output.status_code}")
 
 
 def exception_wrapper(func: Callable[[Reddit], None]) -> Callable[[Reddit], None]:
