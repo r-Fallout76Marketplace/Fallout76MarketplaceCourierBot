@@ -122,8 +122,8 @@ def request_listener(reddit: Reddit):
 def main():
     reddit = Reddit(client_id=os.getenv('client_id'),
                     client_secret=os.getenv('client_secret'),
-                    username=os.getenv('username'),
-                    password=os.getenv('password'),
+                    username=os.getenv('reddit_username'),
+                    password=os.getenv('reddit_password'),
                     user_agent=os.getenv('user_agent'))
     request_listener(reddit)
 
